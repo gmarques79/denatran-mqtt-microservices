@@ -1,0 +1,83 @@
+services:
+  mqtt:
+    image: eclipse-mosquitto:2.0
+    container_name: denatran-mqtt
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    restart: unless-stopped
+    networks:
+      - denatran-net
+
+  condutores:
+    build:
+      context: .
+      dockerfile: services/condutores/Dockerfile
+    container_name: denatran-condutores
+    depends_on:
+      - mqtt
+    environment:
+      - MQTT_HOST=mqtt
+      - MQTT_PORT=1883
+    volumes:
+      - ./services/condutores/data:/app/services/condutores/data
+    restart: unless-stopped
+    networks:
+      - denatran-net
+
+  veiculos:
+    build:
+      context: .
+      dockerfile: services/veiculos/Dockerfile
+    container_name: denatran-veiculos
+    depends_on:
+      - mqtt
+      - condutores
+    environment:
+      - MQTT_HOST=mqtt
+      - MQTT_PORT=1883
+    volumes:
+      - ./services/veiculos/data:/app/services/veiculos/data
+    restart: unless-stopped
+    networks:
+      - denatran-net
+
+  multas:
+    build:
+      context: .
+      dockerfile: services/multas/Dockerfile
+    container_name: denatran-multas
+    depends_on:
+      - mqtt
+      - veiculos
+    environment:
+      - MQTT_HOST=mqtt
+      - MQTT_PORT=1883
+    volumes:
+      - ./services/multas/data:/app/services/multas/data
+    restart: unless-stopped
+    networks:
+      - denatran-net
+
+  cliente:
+    build:
+      context: .
+      dockerfile: cliente/Dockerfile
+    container_name: denatran-cliente
+    depends_on:
+      - mqtt
+      - condutores
+      - veiculos
+      - multas
+    environment:
+      - MQTT_HOST=mqtt
+      - MQTT_PORT=1883
+    stdin_open: true
+    tty: true
+    networks:
+      - denatran-net
+
+networks:
+  denatran-net:
+    driver: bridge

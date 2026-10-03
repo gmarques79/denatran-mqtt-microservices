@@ -1,0 +1,3 @@
+"""
+Microsserviço de Multas.
+"""

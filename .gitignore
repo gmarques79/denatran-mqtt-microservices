@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Pytest / Cache / Test reports
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases (os bancos SQLite são criados automaticamente pelos microsserviços em runtime)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+services/**/data/*.db
+
+# IDEs & System
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+.gemini/
+.antigravity/
