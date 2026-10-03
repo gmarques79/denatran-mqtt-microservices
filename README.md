@@ -2,7 +2,7 @@
 
 **Atividade 01 de Sistemas Distribuídos**  
 **Universidade Federal de Sergipe (UFS)**  
-**Autor:** Gustavo
+**Autor:** Gustavo Henrique Marques
 
 ---
 
